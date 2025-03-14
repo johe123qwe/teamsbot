@@ -122,7 +122,7 @@ async def _send_proactive_message():
 APP = web.Application(middlewares=[aiohttp_error_middleware])
 APP.router.add_post("/api/messages", messages)
 APP.router.add_get("/api/notify", notify)
-APP.router.add_post("/api/notify_custom", notify_custom)
+APP.router.add_post("/api/send-message", notify_custom)
 
 if __name__ == "__main__":
     try:
