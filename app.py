@@ -126,6 +126,6 @@ APP.router.add_post("/api/send-message", notify_custom)
 
 if __name__ == "__main__":
     try:
-        web.run_app(APP, host="localhost", port=CONFIG.PORT)
+        web.run_app(APP, host="127.0.0.1", port=CONFIG.PORT)
     except Exception as error:
         raise error
