@@ -1,0 +1,130 @@
+{
+    "29:1WYxt4cPUUvajY5TJrpFKliDrs67J6nKvexR8j-3R5J3NFVPebPcly4NzR4RO6ndV": {
+        "activity_id": "1741984452405",
+        "bot": {
+            "additional_properties": {},
+            "id": "28:f8d1650f-266f-48d4-8d41-cb96c4a5f078",
+            "name": "mybot",
+            "aad_object_id": null,
+            "role": null,
+            "properties": null
+        },
+        "channel_id": "skype",
+        "conversation": {
+            "additional_properties": {},
+            "is_group": true,
+            "conversation_type": null,
+            "id": "19:e38968c2454d4ea69a5c0b18685ccbe3@thread.skype",
+            "name": null,
+            "aad_object_id": null,
+            "role": null,
+            "tenant_id": null,
+            "properties": null
+        },
+        "service_url": "https://smba.trafficmanager.net/apis/",
+        "user": {
+            "additional_properties": {},
+            "id": "29:1WYxt4cPUUvajY5TJrpFKliDrs67J6nKvexR8j-3R5J3NFVPebPcly4NzR4RO6ndV",
+            "name": "DE \u6653\u611a",
+            "aad_object_id": null,
+            "role": null,
+            "properties": null
+        }
+    },
+    "29:1vC8h1Bvc5AqEaMCXoYsMmV9dYfbIKLljmTkWjhsWuluz5zw3FP3Bs0fkAMCqSgHP": {
+        "activity_id": "1741978996347",
+        "bot": {
+            "additional_properties": {},
+            "id": "28:f8d1650f-266f-48d4-8d41-cb96c4a5f078",
+            "name": "mybot",
+            "aad_object_id": null,
+            "role": null,
+            "properties": null
+        },
+        "channel_id": "skype",
+        "conversation": {
+            "additional_properties": {},
+            "is_group": null,
+            "conversation_type": null,
+            "id": "29:1vC8h1Bvc5AqEaMCXoYsMmV9dYfbIKLljmTkWjhsWuluz5zw3FP3Bs0fkAMCqSgHP",
+            "name": null,
+            "aad_object_id": null,
+            "role": null,
+            "tenant_id": null,
+            "properties": null
+        },
+        "service_url": "https://smba.trafficmanager.net/apis/",
+        "user": {
+            "additional_properties": {},
+            "id": "29:1vC8h1Bvc5AqEaMCXoYsMmV9dYfbIKLljmTkWjhsWuluz5zw3FP3Bs0fkAMCqSgHP",
+            "name": "fasfefer rwarrew",
+            "aad_object_id": null,
+            "role": null,
+            "properties": null
+        }
+    },
+    "29:1hUTHNpeIspArkrqQ0svXjV3dpfxCEXP7zIrDNXHR2NKZAPgItJ0-UlwnANfJQJ9u": {
+        "activity_id": "1741983972723",
+        "bot": {
+            "additional_properties": {},
+            "id": "28:f8d1650f-266f-48d4-8d41-cb96c4a5f078",
+            "name": "mybot",
+            "aad_object_id": null,
+            "role": null,
+            "properties": null
+        },
+        "channel_id": "skype",
+        "conversation": {
+            "additional_properties": {},
+            "is_group": null,
+            "conversation_type": null,
+            "id": "29:1hUTHNpeIspArkrqQ0svXjV3dpfxCEXP7zIrDNXHR2NKZAPgItJ0-UlwnANfJQJ9u",
+            "name": null,
+            "aad_object_id": null,
+            "role": null,
+            "tenant_id": null,
+            "properties": null
+        },
+        "service_url": "https://smba.trafficmanager.net/apis/",
+        "user": {
+            "additional_properties": {},
+            "id": "29:1hUTHNpeIspArkrqQ0svXjV3dpfxCEXP7zIrDNXHR2NKZAPgItJ0-UlwnANfJQJ9u",
+            "name": "IT \u51b2\u7834",
+            "aad_object_id": null,
+            "role": null,
+            "properties": null
+        }
+    },
+    "29:14t17eA_T9_3gAbywLlRlgWMvL1i0rsN0v5mBvKTiPKnrOAw41qhmnOuK11cfuNnD": {
+        "activity_id": "1741980438058",
+        "bot": {
+            "additional_properties": {},
+            "id": "28:f8d1650f-266f-48d4-8d41-cb96c4a5f078",
+            "name": "mybot",
+            "aad_object_id": null,
+            "role": null,
+            "properties": null
+        },
+        "channel_id": "skype",
+        "conversation": {
+            "additional_properties": {},
+            "is_group": true,
+            "conversation_type": null,
+            "id": "19:4d80d348f4ad475b8d4a71ecbb07a426@thread.skype",
+            "name": null,
+            "aad_object_id": null,
+            "role": null,
+            "tenant_id": null,
+            "properties": null
+        },
+        "service_url": "https://smba.trafficmanager.net/apis/",
+        "user": {
+            "additional_properties": {},
+            "id": "29:14t17eA_T9_3gAbywLlRlgWMvL1i0rsN0v5mBvKTiPKnrOAw41qhmnOuK11cfuNnD",
+            "name": "\u6768\u6797 \u2328 GR",
+            "aad_object_id": null,
+            "role": null,
+            "properties": null
+        }
+    }
+}
