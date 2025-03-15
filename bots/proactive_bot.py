@@ -37,6 +37,15 @@ class ProactiveBot(ActivityHandler):
         if turn_context.activity.text.strip().lower() == "myid" or "myid" in turn_context.activity.text.lower():
             user_id = turn_context.activity.from_property.id
             await turn_context.send_activity(f"Your ID is: {user_id}")
+        
+        # 新增：检查消息内容是否为 "convid"
+        elif turn_context.activity.text.strip().lower() == "convid" or "convid" in turn_context.activity.text.lower():
+            conversation_id = turn_context.activity.conversation.id
+            await turn_context.send_activity(f"Your Conversation ID is: {conversation_id}")
+        
+        elif turn_context.activity.text.strip().lower() == "myname" or "myname" in turn_context.activity.text.lower():
+            user_name = turn_context.activity.from_property.name
+            await turn_context.send_activity(f"Your Name is: {user_name}")
         else:
             await turn_context.send_activity(f"You sent: {turn_context.activity.text}")
 
@@ -48,8 +57,8 @@ class ProactiveBot(ActivityHandler):
         :return:
         """
         conversation_reference = TurnContext.get_conversation_reference(activity)
-        user_id = conversation_reference.user.id
-        self.conversation_references[user_id] = conversation_reference
+        conversation_id = conversation_reference.conversation.id
+        self.conversation_references[conversation_id] = conversation_reference
         self._save_conversation_references()
 
     def _load_conversation_references(self):

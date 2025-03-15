@@ -71,7 +71,6 @@ BOT = ProactiveBot(CONVERSATION_REFERENCES)
 
 # Listen for incoming requests on /api/messages.
 async def messages(req: Request) -> Response:
-    print(req, 74)
     return await ADAPTER.process(req, BOT)
 
 
@@ -93,7 +92,7 @@ async def notify_custom(req: Request) -> Response:
         return json_response({"error": f"Invalid JSON payload: {e}"}, status=400)
     
     await _send_proactive_message_custom(message, user_id)
-    print(BOT.print_all_conversation_references(), 96)
+    # print(BOT.print_all_conversation_references(), 96)
     return Response(status=HTTPStatus.OK, text=f"Proactive message sent to user {user_id}: {message}")
 
 # 内部方法：发送自定义主动消息给特定用户
@@ -118,11 +117,39 @@ async def _send_proactive_message():
             APP_ID,
         )
 
+# 新增 /api/send-message-by-conversation-id 路由，通过 POST 请求传入消息和 Conversation ID，并发送给特定对话
+async def send_message_by_conversation_id(req: Request) -> Response:
+    try:
+        # 期望请求体为 JSON 格式，且包含 "message" 和 "conversation_id" 字段
+        data = await req.json()
+        message = data.get("message", None)
+        conversation_id = data.get("conversation_id", None)
+        if not message or not conversation_id:
+            return json_response({"error": "Missing 'message' or 'conversation_id' in request payload."}, status=400)
+    except Exception as e:
+        return json_response({"error": f"Invalid JSON payload: {e}"}, status=400)
+    
+    await _send_message_by_conversation_id(message, conversation_id)
+    return Response(status=HTTPStatus.OK, text=f"Message sent to conversation {conversation_id}: {message}")
+
+# 内部方法：通过 Conversation ID 发送消息
+async def _send_message_by_conversation_id(message: str, conversation_id: str):
+    print(f"Attempting to send message to Conversation ID: {conversation_id}")
+    conversation_reference = CONVERSATION_REFERENCES.get(conversation_id)
+    if conversation_reference:
+        await ADAPTER.continue_conversation(
+            conversation_reference,
+            lambda turn_context: turn_context.send_activity(message),
+            APP_ID,
+        )
+    else:
+        print(f"No conversation reference found for conversation ID {conversation_id}")
 
 APP = web.Application(middlewares=[aiohttp_error_middleware])
 APP.router.add_post("/api/messages", messages)
 APP.router.add_get("/api/notify", notify)
 APP.router.add_post("/api/send-message", notify_custom)
+APP.router.add_post("/api/send-by-convid", send_message_by_conversation_id)
 
 if __name__ == "__main__":
     try:

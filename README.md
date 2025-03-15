@@ -60,9 +60,17 @@ curl -X POST https://YOURURL/api/notify \
 ```bash
 curl -X POST https://YOURURL/api/send-message \
      -H "Content-Type: application/json" \
-     -d '{"message": "Hello, this is a custom message!", "user_id": "29:1WYxt4cPUUvajY5TJrpFKliDr"}'
+     -d '{"message": "Hello, this is a custom message!", "user_id": "29:1WYxtJrpFKliDr"}'
 ```
 - user_id：通过给机器人发送 ”myid“ 获取 ID 号
+
+通过对话ID发消息
+```bash
+curl -X POST https://YOURURL/api/send-by-convid \
+     -H "Content-Type: application/json" \
+     -d '{"message": "Hello, this is a custom message!", "conversation_id": "19:6f566893c2c03400cb8"}'
+```
+- conversation_id：通过给机器人发送 ”convid“ 获取 ID 号
 
 ## 已知问题
 
