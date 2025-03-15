@@ -92,7 +92,7 @@ async def notify_custom(req: Request) -> Response:
         return json_response({"error": f"Invalid JSON payload: {e}"}, status=400)
     
     await _send_proactive_message_custom(message, user_id)
-    # print(BOT.print_all_conversation_references(), 96)
+    print(message, user_id, 95)
     return Response(status=HTTPStatus.OK, text=f"Proactive message sent to user {user_id}: {message}")
 
 # 内部方法：发送自定义主动消息给特定用户
@@ -130,6 +130,7 @@ async def send_message_by_conversation_id(req: Request) -> Response:
         return json_response({"error": f"Invalid JSON payload: {e}"}, status=400)
     
     await _send_message_by_conversation_id(message, conversation_id)
+    print(message, conversation_id, 133)
     return Response(status=HTTPStatus.OK, text=f"Message sent to conversation {conversation_id}: {message}")
 
 # 内部方法：通过 Conversation ID 发送消息
