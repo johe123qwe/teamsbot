@@ -25,9 +25,7 @@ class ProactiveBot(ActivityHandler):
         for member in members_added:
             if member.id != turn_context.activity.recipient.id:
                 await turn_context.send_activity(
-                    "Welcome to the Proactive Bot sample.  Navigate to "
-                    "http://localhost:3978/api/notify to proactively message everyone "
-                    "who has previously messaged this bot."
+                    "Welcome to the Proactive Bot sample."
                 )
 
     async def on_message_activity(self, turn_context: TurnContext):
