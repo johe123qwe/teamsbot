@@ -70,7 +70,7 @@ curl -X POST https://YOURURL/api/send-by-convid \
      -H "Content-Type: application/json" \
      -d '{"message": "Hello, this is a custom message!", "conversation_id": "19:6f566893c2c03400cb8"}'
 ```
-- conversation_id：通过给机器人发送 ”convid“ 获取 ID 号
+- conversation_id：通过给机器人发送 ”convid“ 获取 ID 号，在群组里需要@机器人
 
 ## 已知问题
 
