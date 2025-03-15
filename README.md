@@ -72,8 +72,4 @@ curl -X POST https://YOURURL/api/send-by-convid \
 ```
 - conversation_id：通过给机器人发送 ”convid“ 获取 ID 号，在群组里需要@机器人
 
-## 已知问题
-
-- 目前机器人只能通过用户 ID 发一对一消息，也可以在群组里发消息，但是无法给多个用户或群组发消息，每一个消息都将会发给最后一次对话。
-
 [BotBuilder-README](https://github.com/microsoft/BotBuilder-Samples/blob/main/README.md)
