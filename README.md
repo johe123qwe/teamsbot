@@ -28,7 +28,7 @@ pip install -r requirements.txt
 1. [注册一个 azure 帐号](https://portal.azure.com/#home)
 2. 搜索 azure bot，创建一个机器人 ![创建](./doc/createbot.png)
 3. 在配置里为“消息传递终结点”添加一个域名 ![配置](./doc/config.png)
-4. 在“渠道”中添加 ”Microsoft Teams“ 和 ”Skype ![渠道](./doc/channel.png)
+4. 在“渠道”中添加 ”Microsoft Teams“ 和 ”Skype ![渠道](./doc/channels.png)
 
 修改配置文件
 ```bash
