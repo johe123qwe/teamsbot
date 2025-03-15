@@ -64,7 +64,7 @@ curl -X POST https://YOURURL/api/send-message \
 ```
 - user_id：通过给机器人发送 ”myid“ 获取 ID 号
 
-通过对话ID发消息
+通过对话 ID 发消息
 ```bash
 curl -X POST https://YOURURL/api/send-by-convid \
      -H "Content-Type: application/json" \
