@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# 给群组发消息
+# 在群组内@机器人，发送 convid 获取对话 ID
+# 使用方法:
+# bash teams-group.sh https://xxx.xyz ID subject content
+
 url=$1
 to=$2
 subject=$3
