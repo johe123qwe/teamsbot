@@ -91,6 +91,10 @@ async def notify_custom(req: Request) -> Response:
     except Exception as e:
         return json_response({"error": f"Invalid JSON payload: {e}"}, status=400)
     
+    # 检查用户ID是否存在于会话引用中
+    if user_id not in CONVERSATION_REFERENCES:
+        return json_response({"error": f"No conversation reference found for user {user_id}"}, status=404)
+    
     await _send_proactive_message_custom(message, user_id)
     print(message, user_id, 95)
     return Response(status=HTTPStatus.OK, text=f"Proactive message sent to user {user_id}: {message}")
@@ -98,14 +102,11 @@ async def notify_custom(req: Request) -> Response:
 # 内部方法：发送自定义主动消息给特定用户
 async def _send_proactive_message_custom(message: str, user_id: str):
     conversation_reference = CONVERSATION_REFERENCES.get(user_id)
-    if conversation_reference:
-        await ADAPTER.continue_conversation(
-            conversation_reference,
-            lambda turn_context: turn_context.send_activity(message),
-            APP_ID,
-        )
-    else:
-        print(f"No conversation reference found for user {user_id}")
+    await ADAPTER.continue_conversation(
+        conversation_reference,
+        lambda turn_context: turn_context.send_activity(message),
+        APP_ID,
+    )
 
 # Send a message to all conversation members.
 # This uses the shared Dictionary that the Bot adds conversation references to.
@@ -129,6 +130,10 @@ async def send_message_by_conversation_id(req: Request) -> Response:
     except Exception as e:
         return json_response({"error": f"Invalid JSON payload: {e}"}, status=400)
     
+    # 检查会话ID是否存在于会话引用中
+    if conversation_id not in CONVERSATION_REFERENCES:
+        return json_response({"error": f"No conversation reference found for conversation ID {conversation_id}"}, status=404)
+    
     await _send_message_by_conversation_id(message, conversation_id)
     print(message, conversation_id, 133)
     return Response(status=HTTPStatus.OK, text=f"Message sent to conversation {conversation_id}: {message}")
@@ -137,14 +142,11 @@ async def send_message_by_conversation_id(req: Request) -> Response:
 async def _send_message_by_conversation_id(message: str, conversation_id: str):
     print(f"Attempting to send message to Conversation ID: {conversation_id}")
     conversation_reference = CONVERSATION_REFERENCES.get(conversation_id)
-    if conversation_reference:
-        await ADAPTER.continue_conversation(
-            conversation_reference,
-            lambda turn_context: turn_context.send_activity(message),
-            APP_ID,
-        )
-    else:
-        print(f"No conversation reference found for conversation ID {conversation_id}")
+    await ADAPTER.continue_conversation(
+        conversation_reference,
+        lambda turn_context: turn_context.send_activity(message),
+        APP_ID,
+    )
 
 APP = web.Application(middlewares=[aiohttp_error_middleware])
 APP.router.add_post("/api/messages", messages)
