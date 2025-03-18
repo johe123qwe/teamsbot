@@ -25,7 +25,7 @@ class ProactiveBot(ActivityHandler):
         for member in members_added:
             if member.id != turn_context.activity.recipient.id:
                 await turn_context.send_activity(
-                    "Welcome to the Proactive Bot sample."
+                    "Welcome to the group!"
                 )
 
     async def on_message_activity(self, turn_context: TurnContext):
