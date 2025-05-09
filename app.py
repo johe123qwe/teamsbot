@@ -107,7 +107,8 @@ async def notify_custom(req: Request) -> Response:
         return json_response({"error": f"No conversation reference found for user {user_id}"}, status=404)
     
     await _send_proactive_message_custom(message, user_id)
-    print(message, user_id, 95)
+    now = datetime.now()
+    print(now, message, user_id, 95)
     return Response(status=HTTPStatus.OK, text=f"Proactive message sent to user {user_id}: {message}")
 
 # 内部方法：发送自定义主动消息给特定用户
