@@ -27,32 +27,43 @@ CONFIG = DefaultConfig()
 ADAPTER = CloudAdapter(ConfigurationBotFrameworkAuthentication(CONFIG))
 
 # Catch-all for errors.
+import sys
+import traceback
+from botbuilder.schema import ErrorResponseException
+
+# ...existing code...
+
 async def on_error(context: TurnContext, error: Exception):
-    # This check writes out errors to console log .vs. app insights.
-    # NOTE: In production environment, you should consider logging this to Azure
-    #       application insights.
+    # 检查是否是 Bot 不在对话列表中的错误
+    if isinstance(error, ErrorResponseException) and "BotNotInConversationRoster" in str(error):
+        print("Bot is not part of the conversation roster. The bot may have been removed from the team/chat.", 
+              file=sys.stderr)
+        return
+    
+    # 其他错误的处理
     print(f"\n [on_turn_error] unhandled error: {error}", file=sys.stderr)
     traceback.print_exc()
 
-    # Send a message to the user
-    await context.send_activity("The bot encountered an error or bug.")
-    await context.send_activity(
-        "To continue to run this bot, please fix the bot source code."
-    )
-    # Send a trace activity if we're talking to the Bot Framework Emulator
-    if context.activity.channel_id == "emulator":
-        # Create a trace activity that contains the error object
-        trace_activity = Activity(
-            label="TurnError",
-            name="on_turn_error Trace",
-            timestamp=datetime.utcnow(),
-            type=ActivityTypes.trace,
-            value=f"{error}",
-            value_type="https://www.botframework.com/schemas/error",
+    try:
+        # 尝试发送错误消息
+        await context.send_activity("The bot encountered an error or bug.")
+        await context.send_activity(
+            "To continue to run this bot, please fix the bot source code."
         )
-        # Send a trace activity, which will be displayed in Bot Framework Emulator
-        await context.send_activity(trace_activity)
-
+        
+        # Send a trace activity if we're talking to the Bot Framework Emulator
+        if context.activity.channel_id == "emulator":
+            trace_activity = Activity(
+                label="TurnError",
+                name="on_turn_error Trace",
+                timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                type=ActivityTypes.trace,
+                value=f"{error}",
+                value_type="https://www.botframework.com/schemas/error",
+            )
+            await context.send_activity(trace_activity)
+    except Exception as send_error:
+        print(f"Failed to send error message: {send_error}", file=sys.stderr)
 
 ADAPTER.on_turn_error = on_error
 
@@ -135,7 +146,8 @@ async def send_message_by_conversation_id(req: Request) -> Response:
         return json_response({"error": f"No conversation reference found for conversation ID {conversation_id}"}, status=404)
     
     await _send_message_by_conversation_id(message, conversation_id)
-    print(message, conversation_id, 133)
+    now = datetime.now()
+    print(now, message, conversation_id, 133)
     return Response(status=HTTPStatus.OK, text=f"Message sent to conversation {conversation_id}: {message}")
 
 # 内部方法：通过 Conversation ID 发送消息
