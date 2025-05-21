@@ -15,7 +15,8 @@ from botbuilder.core import (
 )
 from botbuilder.core.integration import aiohttp_error_middleware
 from botbuilder.integration.aiohttp import CloudAdapter, ConfigurationBotFrameworkAuthentication
-from botbuilder.schema import Activity, ActivityTypes, ConversationReference
+from botbuilder.schema import Activity, ActivityTypes, ConversationReference, Attachment
+from botbuilder.core import MessageFactory
 
 from bots import ProactiveBot
 from config import DefaultConfig
@@ -114,9 +115,38 @@ async def notify_custom(req: Request) -> Response:
 # 内部方法：发送自定义主动消息给特定用户
 async def _send_proactive_message_custom(message: str, user_id: str):
     conversation_reference = CONVERSATION_REFERENCES.get(user_id)
+
+    # 处理消息，分割成行
+    lines = message.replace("<br />", "\n").replace("<p>", "").replace("</p>", "\n")
+    paragraphs = lines.split("\n")
+    paragraphs = [p for p in paragraphs if p.strip()]  # 移除空行
+    
+    # 创建 Adaptive Card
+    card_content = {
+        "type": "AdaptiveCard",
+        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        "version": "1.3",
+        "body": []
+    }
+    
+    # 为每个段落添加一个TextBlock
+    for paragraph in paragraphs:
+        card_content["body"].append({
+            "type": "TextBlock",
+            "text": paragraph,
+            "wrap": True,
+            "separator": True
+        })
+    
+
+    attachment = Attachment(
+        content_type="application/vnd.microsoft.card.adaptive",
+        content=card_content
+    )
+    
     await ADAPTER.continue_conversation(
         conversation_reference,
-        lambda turn_context: turn_context.send_activity(message),
+        lambda turn_context: turn_context.send_activity(MessageFactory.attachment(attachment)),
         APP_ID,
     )
 
@@ -152,12 +182,42 @@ async def send_message_by_conversation_id(req: Request) -> Response:
     return Response(status=HTTPStatus.OK, text=f"Message sent to conversation {conversation_id}: {message}")
 
 # 内部方法：通过 Conversation ID 发送消息
+
 async def _send_message_by_conversation_id(message: str, conversation_id: str):
     print(f"Attempting to send message to Conversation ID: {conversation_id}")
     conversation_reference = CONVERSATION_REFERENCES.get(conversation_id)
+    
+    # 处理消息，分割成行
+    lines = message.replace("<br />", "\n").replace("<p>", "").replace("</p>", "\n")
+    paragraphs = lines.split("\n")
+    paragraphs = [p for p in paragraphs if p.strip()]  # 移除空行
+    
+    # 创建 Adaptive Card
+    card_content = {
+        "type": "AdaptiveCard",
+        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        "version": "1.3",
+        "body": []
+    }
+    
+    # 为每个段落添加一个TextBlock
+    for paragraph in paragraphs:
+        card_content["body"].append({
+            "type": "TextBlock",
+            "text": paragraph,
+            "wrap": True,
+            "separator": True
+        })
+    
+
+    attachment = Attachment(
+        content_type="application/vnd.microsoft.card.adaptive",
+        content=card_content
+    )
+    
     await ADAPTER.continue_conversation(
         conversation_reference,
-        lambda turn_context: turn_context.send_activity(message),
+        lambda turn_context: turn_context.send_activity(MessageFactory.attachment(attachment)),
         APP_ID,
     )
 
