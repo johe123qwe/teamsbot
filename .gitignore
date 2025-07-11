@@ -172,6 +172,7 @@ cython_debug/
 
 
 # 忽略苹果电脑生成的文件
+.history/
 .DS_Store
 **/.DS_Store
 .DS_Store?
