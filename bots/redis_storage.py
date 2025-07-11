@@ -54,7 +54,7 @@ class RedisConversationReferences:
             self.redis_client.hset(key, mapping=serialized_ref)
             logger.debug(f"Added conversation reference for {conversation_id}")
         except Exception as e:
-            logger.error(f"Failed to add conversation reference: {e}")
+            logger.error(f"Failed to add conversation reference: {e} {conversation_id}")
             raise
     
     def get_conversation_reference(self, conversation_id: str) -> Optional[ConversationReference]:
@@ -111,18 +111,44 @@ class RedisConversationReferences:
             raise
     
     def _serialize_conversation_reference(self, reference: ConversationReference) -> dict:
-        """序列化对话引用为字典"""
-        return {
-            "activity_id": reference.activity_id or "",
-            "bot_id": reference.bot.id if reference.bot else "",
-            "bot_name": reference.bot.name if reference.bot else "",
-            "channel_id": reference.channel_id or "",
-            "conversation_id": reference.conversation.id if reference.conversation else "",
-            "conversation_is_group": str(reference.conversation.is_group) if reference.conversation and reference.conversation.is_group is not None else "",
-            "service_url": reference.service_url or "",
-            "user_id": reference.user.id if reference.user else "",
-            "user_name": reference.user.name if reference.user else "",
-        }
+        """序列化对话引用为字典，安全处理None值"""
+        def safe_str(value):
+            """安全地将值转换为字符串，None转换为空字符串"""
+            return "" if value is None else str(value)
+        
+        def safe_bool(value):
+            """安全地将布尔值转换为字符串"""
+            if value is None:
+                return ""
+            return "true" if value else "false"
+        
+        try:
+            return {
+                "activity_id": safe_str(reference.activity_id),
+                "bot_id": safe_str(reference.bot.id if reference.bot else None),
+                "bot_name": safe_str(reference.bot.name if reference.bot else None),
+                "channel_id": safe_str(reference.channel_id),
+                "conversation_id": safe_str(reference.conversation.id if reference.conversation else None),
+                "conversation_is_group": safe_bool(reference.conversation.is_group if reference.conversation else None),
+                "service_url": safe_str(reference.service_url),
+                "user_id": safe_str(reference.user.id if reference.user else None),
+                "user_name": safe_str(reference.user.name if reference.user else None),
+            }
+        except Exception as e:
+            logger.error(f"Failed to serialize conversation reference: {e}")
+            # 返回一个安全的默认值
+            return {
+                "activity_id": "",
+                "bot_id": "",
+                "bot_name": "",
+                "channel_id": "",
+                "conversation_id": "",
+                "conversation_is_group": "",
+                "service_url": "",
+                "user_id": "",
+                "user_name": "",
+            }
+
     
     def _deserialize_conversation_reference(self, data: dict) -> ConversationReference:
         """反序列化字典为对话引用"""
@@ -158,6 +184,7 @@ class RedisConversationReferences:
             
             for conversation_id, reference_data in data.items():
                 # 重构引用数据
+                print(169, conversation_id)
                 reference = ConversationReference(
                     activity_id=reference_data.get("activity_id"),
                     bot=ChannelAccount(**reference_data.get("bot", {})),
@@ -166,8 +193,9 @@ class RedisConversationReferences:
                     service_url=reference_data.get("service_url"),
                     user=ChannelAccount(**reference_data.get("user", {}))
                 )
-                
+                print(17000000, conversation_id, reference.user)
                 self.add_conversation_reference(conversation_id, reference)
+                print()
             
             logger.info(f"Successfully migrated {len(data)} conversation references from JSON to Redis")
             
@@ -206,6 +234,7 @@ class RedisConversationReferences:
         """获取Redis连接信息"""
         try:
             info = self.redis_client.info()
+            print(237, info)
             return {
                 "redis_version": info.get("redis_version"),
                 "connected_clients": info.get("connected_clients"),

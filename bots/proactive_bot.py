@@ -12,9 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class ProactiveBot(ActivityHandler):
-    def __init__(self, redis_host: str = "localhost", redis_port: int = 6379, 
-                 redis_db: int = 0, redis_password: Optional[str] = None,
-                 json_backup_file: str = "conversation_references.json"):
+    def __init__(self, redis_host: str = "localhost", redis_port: str = "6378", 
+                 redis_db: str = "1", redis_password: Optional[str] = None):
         """
         初始化机器人
         
@@ -32,7 +31,8 @@ class ProactiveBot(ActivityHandler):
                 redis_db=redis_db,
                 redis_password=redis_password
             )
-            
+            print(redis_password, redis_db, redis_host, redis_port, 34)
+
             # 如果是首次启动，尝试从JSON文件迁移数据
             # self.redis_storage.migrate_from_json(json_backup_file)
             
@@ -41,6 +41,11 @@ class ProactiveBot(ActivityHandler):
         except Exception as e:
             logger.error(f"Failed to initialize Redis storage: {e}")
             raise
+    
+    def migrate_from_json_job(self, json_backup_file):
+        print('45, migrating from JSON...')
+        self.redis_storage.migrate_from_json(json_backup_file)
+        logger.info("ProactiveBot initialized with Redis storage")
 
     async def on_conversation_update_activity(self, turn_context: TurnContext):
         self._add_conversation_reference(turn_context.activity)

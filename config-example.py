@@ -15,3 +15,9 @@ class DefaultConfig:
     APP_PASSWORD = os.environ.get("MicrosoftAppPassword", "")
     APP_TYPE = os.environ.get("MicrosoftAppType", "MultiTenant")
     APP_TENANTID = os.environ.get("MicrosoftAppTenantId", "")
+    API_KEY = os.environ.get("API_KEY", "")
+    REDIS_DB = 
+    REDIS_HOST = 
+    REDIS_PORT = 
+    REDIS_PASSWORD = 
+    JSON_BACKUP_FILE = os.environ.get("JSON_BACKUP_FILE", "conversation_references.json")

@@ -208,6 +208,15 @@ async def export_to_json(req: Request) -> Response:
         logger.error(f"Failed to export: {e}")
         return json_response({"error": f"Failed to export: {e}"}, status=500)
 
+@require_api_key
+async def migrate(req: Request) -> Response:
+    try:
+        BOT.migrate_from_json_job("conversation_references.json")
+        return json_response({"message": "Data migrated from JSON successfully."})
+    except Exception as e:
+        logger.error(f"Failed to migrate from JSON: {e}")
+        return json_response({"error": f"Failed to migrate from JSON: {e}"}, status=500)
+
 # 新增：获取Redis状态的API
 @require_api_key
 async def redis_status(req: Request) -> Response:
@@ -313,6 +322,7 @@ APP.router.add_post("/api/send-by-convid", send_message_by_conversation_id)
 APP.router.add_get("/api/references", get_all_references)
 APP.router.add_get("/api/export", export_to_json)
 APP.router.add_get("/api/redis-status", redis_status)
+APP.router.add_get("/api/migrate-from-json", migrate)
 
 if __name__ == "__main__":
     try:
